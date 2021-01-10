@@ -3,9 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Good Things</title>
+    <style>
+        body {
+    background: #1f2855;
+    color: #C5CAE5;
+    overflow: hidden;
+  }
+  
+  .appbody {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .create {
+      margin: 30px auto;
+      width: fit-content;
+      display: flex;
+  }
+
+  .char_limit {
+      width: 100px;
+      font-size: 38pt;
+      color: #7878a5;
+  }
+  
+  
+  .good_item {
+    background:#283265;
+    width: 400px;
+    border: solid#849CF8 1px;
+    height: 40px;
+    padding: 10px 10px;
+    border-radius: 2px;
+    color: #849CF8;
+    outline: none;
+    font-size: 14pt;
+    margin-right: 5px;
+  }
+  
+  .good_item::placeholder{
+    color: #54649C;
+  }
+  
+  .submit {
+    border: none;
+    font-size: 13pt;
+    background: linear-gradient(to left, #5f4efb, #786ada);
+    color: #C5CAE5;
+    cursor: pointer;
+    height: 62px;
+    width: 100px;
+  }
+
+  .item_container {
+      height: 600px;
+      width: 100%;
+      overflow-y: scroll;
+  }
+  
+  .items {
+      display: flex;
+      justify-content: center;
+      flex-direction: row-reverse;
+      flex-wrap: wrap-reverse;
+  }
+
+  .new_item {
+    background:  #283265;
+    box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.2);
+    width: 350px;
+    height: 150px;
+    padding: 10px 20px;
+    border-radius: 2px;
+    outline: none;
+    margin: 10px;
+    overflow: hidden;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 15pt;
+    display: flex; 
+    flex-direction: row;
+  }
+
+  .new_item:hover {
+      background: #394b96;
+  }
+
+  .date {
+      font-family: sans-serif;
+      font-size: 14pt;
+      color: #7878a5;
+      margin-right: 5px;
+  }
+
+  p {
+      width: 270px;
+      text-align: justify;
+      outline: none;
+  }
+
+  .delete_btn {
+      display: inline-block;
+      margin: 0 0 0 auto;
+      width: 25px;
+      height: 25px;
+      border: none;
+      padding: 1px;
+      outline: none;
+      cursor: pointer;
+      background: none;
+  }
+
+  .items::-webkit-scrollbar {
+    width: 1em;
+  }
+   
+  .items::-webkit-scrollbar-thumb {
+    background-color: inset (darkgrey);
+    outline: 1px solid slategrey;
+  }
+  
+  @media(max-width: 700px) {
+      .create {
+          margin: none;
+          padding: none;
+      }
+
+      .char_limit {
+          font-size: 25pt;
+          width: 40px;
+          margin-right: 15px;
+      }  
+
+      .good_item {
+          width: 220px;
+          height: 20px;
+          font-size: 12pt;
+      }
+
+      .submit {
+        width: 50px;
+        height: inherit;
+        font-size: 0;
+        background: url("https://www.flaticon.com/svg/static/icons/svg/1057/1057061.svg");
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .new_item {
+          width: 270px;
+      }
+
+  }
+    </style>
 </head>
 <body>
-    <h1> First node app with html </h1>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Things App</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Patrick+Hand&display=swap" rel="stylesheet">   
+</head>
+<body>
+    <div class="appbody">
+        <div class="create">
+            <div class="char_limit"></div>
+            <input class="good_item" placeholder="Todays good item" maxlength="140">
+            <button class="submit">Submit</button>
+        </div>
+        <div class="item_container">
+            <div class="items">
+            </div>
+        </div>
+      </div>
+    <script src="script.js"></script>      
+</body>
+</html>
+
+    <script>
+        let input = document.querySelector(".good_item");
+let submit = document.querySelector(".submit");
+let deleteButton = document.createElement("button");
+let items = document.querySelector(".items")
+
+const theDate = () => {
+    let today = new Date();
+    let date = today.getDate() + '/' + today.getMonth()+1 + '/' + today.getFullYear().toString().substr(-2);
+    return date;
+}
+
+const oneGoodItem = () => {
+  let div = document.createElement("div");
+  items.appendChild(div);
+  div.classList.add("new_item");
+
+  let p = document.createElement("p");
+  div.appendChild(p);
+  p.innerText = input.value;
+  p.contentEditable = "true";
+
+  let span = document.createElement("span");
+  p.insertAdjacentElement("afterbegin", span);
+  span.innerHTML = theDate() + ":";
+  span.classList.add("date");
+  span.contentEditable = "false";
+
+  deleteButton = document.createElement("button");
+  deleteButton.classList.add("delete_btn");
+  div.insertAdjacentElement('beforeend', deleteButton);
+  deleteButton.innerHTML =  "<img src='https://www.flaticon.com/svg/static/icons/svg/545/545751.svg'>";
+  deleteButton.onclick = function(remove) { this.parentNode.remove(this) };
+};
+
+submit.addEventListener('click', () => {
+  if(input.value === ""){
+   input.value = "Whoops you didn't type anything!" 
+  } else {
+    oneGoodItem()
+    input.value = "";
+  };
+  charLength = 140;
+  document.querySelector(".char_limit").innerText = "";
+  
+});
+
+input.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        submit.click();
+    }
+});
+
+let charLength = 140;
+let stringLength = "";
+
+
+
+input.addEventListener('input', () => {
+    stringLength = input.value;
+    let charLimit = charLength - stringLength.length;
+    document.querySelector(".char_limit").innerText = charLimit;
+});
+    </script>
 </body>
 </html>
